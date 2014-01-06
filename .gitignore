@@ -1,0 +1,6 @@
+media/
+*.pyc
+.vagrant/
+.coverage
+
+.DS_Store
