@@ -1,6 +1,7 @@
 media/
 *.pyc
 .vagrant/
+instance/
 .coverage
 
 .DS_Store
