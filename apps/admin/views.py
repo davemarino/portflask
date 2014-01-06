@@ -1,4 +1,5 @@
 from wtforms import fields as f, widgets as w
+from wtforms.validators import Required
 from flask import Flask
 from flask.ext.admin import Admin, BaseView, expose, AdminIndexView
 from flask.ext.login import current_user, login_required
@@ -8,6 +9,8 @@ from wtforms.ext.sqlalchemy.orm import converts
 from flask.ext.admin.contrib.sqlamodel import ModelView
 from flask.ext.admin.contrib.sqlamodel.form import AdminModelConverter
 from flask.ext.login import current_user, login_required
+
+from .forms import validate_url
 
 class MyIndexView(AdminIndexView):
     @expose('/')
@@ -33,3 +36,8 @@ class UnaccessibleModelView(ModelView):
 
 class UserView(UnaccessibleModelView):
 	list_columns = ('username',)
+
+class ProjectView(UnaccessibleModelView):
+    form_args = dict(
+        link=dict(label='Link to the project', validators=[validate_url])
+    )

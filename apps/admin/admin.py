@@ -6,7 +6,7 @@ from apps import db
 from apps.login.models import User
 from apps.portfolio.models import Projects
 
-from views import (MyIndexView, UnaccessibleModelView, UserView)
+from views import (MyIndexView, UnaccessibleModelView, UserView, ProjectView)
 
 
 class AdminApp(object):
@@ -32,6 +32,6 @@ class AdminApp(object):
         # adding user view
         admin.add_view(UserView(User, db.session))
 
-        admin.add_view(UnaccessibleModelView(Projects, db.session))
+        admin.add_view(ProjectView(Projects, db.session))
 
         self.app.register_blueprint(self.__bp)
