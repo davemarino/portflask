@@ -1,0 +1,1 @@
+This is a simple flask application to test it in order to create a portfolio.
