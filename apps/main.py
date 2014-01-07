@@ -76,7 +76,7 @@ def create_flask_app(config_file=None, config_object=None, **kwargs):
 
     from .admin import AdminApp
 
-    AdminApp(app, 'portfolio')
+    AdminApp(app, 'admin')
 
     app.register_blueprint(bp)
 

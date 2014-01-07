@@ -108,8 +108,15 @@
                                     <li > <a href="{{ url_for('auth.login_view') }}">Login</a> </li>
                                 {% else %}
                                     <li>
-                                        <p class="navbar-text">Logged in as <a
-                                            href="{{ url_for('adminview.index') }}" target="_blank">{{ g.user.username }}</a></p>
+                                        <p class="navbar-text">Logged in as 
+                                            {% if g.user.is_admin %}
+                                            <a
+                                            href="{{ url_for('adminview.index') }}"
+                                             target="_blank">{{ g.user.username }}</a>
+                                            {% else %}
+                                                {{g.user.username}}
+                                            {% endif %}
+                                        </p>
                                     </li>
                                     <li class="divider-vertical"></li> 
                                     <li>
