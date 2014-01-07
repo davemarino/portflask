@@ -15,6 +15,7 @@ from flask.ext.login import current_user, login_required
 from flask.ext.admin.form.upload import FileUploadField
 
 from .forms import validate_url
+from .widgets import RichTextArea
 
 static_dir = os.path.join(os.path.abspath(os.path.dirname(__file__)), os.pardir, os.pardir, 'static')
 media_dir = 'media/'
@@ -63,5 +64,6 @@ class ProjectView(UnaccessibleModelView):
     column_sortable_list = ('name',('project', 'project.name'))
     form_overrides = {'image': MyFileUploadField}
     form_args = dict(
-        link=dict(label='Link to the project', validators=[validate_url])
+        link=dict(label='Link to the project', validators=[validate_url]),
+        description=dict(widget=RichTextArea())
     )
