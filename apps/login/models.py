@@ -24,7 +24,7 @@ class User(UserMixin, DBMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(16), unique=True, nullable=False)
     password = db.Column(Encrypted(120), nullable=False)
-    is_admin = db.Column(db.Boolean(name="Admin"))
+    is_admin = db.Column(db.Boolean(name="Admin"), default=False)
 
     def __init__(self, username=None):
         self.username = unicode(username) or None

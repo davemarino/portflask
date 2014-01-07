@@ -40,10 +40,11 @@ class UnaccessibleModelView(ModelView):
 class UserView(UnaccessibleModelView):
     list_columns = ('username',)
     form_args = dict(
-        is_admin=dict(label="Admin")
+        is_admin=dict(label="Admin", default=False)
     )
 
 class ProjectView(UnaccessibleModelView):
+    column_sortable_list = ('name',('project', 'project.name'))
     form_args = dict(
         link=dict(label='Link to the project', validators=[validate_url])
     )
