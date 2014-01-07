@@ -3,5 +3,5 @@ media/
 .vagrant/
 instance/
 .coverage
-
+static/media/
 .DS_Store

@@ -11,6 +11,7 @@ class Projects(DBMixin, db.Model):
     name = db.Column(db.String(40), nullable=False)
     description = db.Column(db.String(400), nullable=False)
     link = db.Column(db.String)
+    image = db.Column(db.String(400))
 
     def __init__(self, name=None, description=None):
         self.name = unicode(name) or None

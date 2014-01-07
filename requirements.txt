@@ -1,6 +1,6 @@
 Flask
-WTForms==1.0.1
-Flask-admin==1.0.1
+WTForms==1.0.5
+Flask-admin==1.0.7
 Flask-login
 Flask-sqlalchemy
 Flask-bcrypt
