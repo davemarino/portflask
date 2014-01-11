@@ -1,24 +1,28 @@
 import os
+import random
 
-from flask import Blueprint, g
+from flask import Blueprint, g, current_app
 from flask.ext.login import LoginManager, current_user, login_user, logout_user
+from sqlalchemy.exc import InvalidRequestError
 
 from .models import User
-from .views import LoginView, LogoutView
+from .views import LoginView, LogoutView, OauthAuthView
+
+from oauth import twitter
 
 template_folder = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')), 'templates')
-login_bp = Blueprint('auth', __name__, template_folder=template_folder)
-
 
 class ExtendedLoginManager(LoginManager):
     def init_app(self, app, add_context_processor=True):
         super(ExtendedLoginManager, self).init_app(app, add_context_processor)
+        self._app = app
+        self.login_bp = Blueprint('auth', __name__, template_folder=template_folder)
 
         # define the load user method, applying the @user_loader decorator
         self.load_user = self.user_loader(self.load_user)
 
         # Login
-        login_bp.add_url_rule('/login/',
+        self.login_bp.add_url_rule('/login/',
                                 view_func=LoginView.as_view('login_view'),
                                 methods=['GET', 'POST'])
 
@@ -26,10 +30,17 @@ class ExtendedLoginManager(LoginManager):
         self.login_view = "auth.login_view"
 
         # Logout
-        login_bp.add_url_rule('/logout',
+        self.login_bp.add_url_rule('/logout',
                                 view_func=LogoutView.as_view('logout_view'))
 
-        app.register_blueprint(login_bp)
+        twitter_callback = "/complete"
+        twitter_handler = OauthAuthView(app, twitter, twitter_callback)
+        self.login_bp.add_url_rule('/twitter', view_func=
+                twitter_handler.get_authentication_view().as_view('twitter_view'), methods=['POST'])
+
+        self.login_bp.add_url_rule(twitter_callback, view_func=twitter_handler.complete_request)
+
+        app.register_blueprint(self.login_bp)
 
         if not hasattr(app, 'extensions'):
             app.extensions = {}
@@ -67,6 +78,23 @@ class ExtendedLoginManager(LoginManager):
             login_user(user)
             return True
         return False
+
+    def authenticate_oauth_user(self, res, service):
+        user_id = res.get('user_id', None)
+        if user_id is None:
+            return False
+        user = User.query.filter_by(username=user_id).first()
+        if user is None:
+            user = User(user_id)
+            user.password=str(random.getrandbits(64))
+            user.is_oauth_user = True
+            user.oauth_service = service
+            self._app.extensions['sqlalchemy'].db.session.add(user)
+            self._app.extensions['sqlalchemy'].db.session.commit()
+
+        login_user(user)
+
+        return True
 
     def logout_user(self):
         "Logout the current user"

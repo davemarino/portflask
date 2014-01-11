@@ -25,9 +25,9 @@ def _syncdb(app=None):
             pass
 
     # create tables
-    with app.app_context():
-        app.logger.info('[*] creating tables')
-        app.extensions['sqlalchemy'].db.create_all()
+    # with app.app_context():
+    app.extensions['sqlalchemy'].db.create_all(app=app)
+    app.logger.info('[*] creating tables')
 
 def _adduser(username, password, app=None):
     # using main_app if an app is not passed

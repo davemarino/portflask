@@ -6,3 +6,4 @@ Flask-sqlalchemy
 Flask-bcrypt
 Flask-DebugToolbar
 Flask-Script
+Flask-OAuthlib

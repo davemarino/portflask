@@ -47,8 +47,8 @@ def create_flask_app(config_file=None, config_object=None, **kwargs):
         app.config.from_pyfile(config_file)
 
     # then override configuration from envvar
-    if 'ASSENTIO_SETTINGS' in os.environ:
-        app.config.from_envvar('ASSENTIO_SETTINGS')
+    if 'PORTFOLIO_SETTINGS' in os.environ:
+        app.config.from_envvar('PORTFOLIO_SETTINGS')
 
     if app.debug and not app.config.get('TESTING', None):
         app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
@@ -69,10 +69,21 @@ def create_flask_app(config_file=None, config_object=None, **kwargs):
         # Store the bcrypt object in the extensions registry
         app.extensions['bcrypt'] = kwargs['bcrypt']
 
+    app.config['TWITTER'] = dict(
+        consumer_key='Y3VbmvbZnNSIWNkvhopuUA',
+        consumer_secret='JtiVYgJRGCNWBRZIOaF6HSoDBtsZAkXmQEAYgNgZOU',
+        base_url='https://api.twitter.com/',
+        request_token_url='https://api.twitter.com/oauth/request_token',
+        access_token_url='https://api.twitter.com/oauth/access_token',
+        authorize_url='https://api.twitter.com/oauth/authorize',
+    )
+
     from .login import LoginManager
+    from .login.oauth import oauth
 
     login_manager = LoginManager()
     login_manager.init_app(app)
+    oauth.init_app(app)
 
     from .admin import AdminApp
 

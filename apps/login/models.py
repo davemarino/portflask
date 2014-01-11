@@ -25,12 +25,20 @@ class User(UserMixin, DBMixin, db.Model):
     username = db.Column(db.String(16), unique=True, nullable=False)
     password = db.Column(Encrypted(120), nullable=False)
     is_admin = db.Column(db.Boolean(name="Admin"), default=False)
+    is_oauth_user = db.Column(db.Boolean(name='Logged with Twitter'), default=False)
+    oauth_service = db.Column(db.String(50))
 
     def __init__(self, username=None):
         self.username = unicode(username) or None
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return '<User %(id)r %(username)r %(is_admin)r %(is_oauth_user)r, %(oauth_service)r>' % {
+        'id': self.id,
+        'username' : self.username,
+        'is_admin' : self.is_admin,
+        'is_oauth_user' : self.is_oauth_user,
+        'oauth_service' : self.oauth_service
+        }
 
     # Required by admin interface
     def __unicode__(self):

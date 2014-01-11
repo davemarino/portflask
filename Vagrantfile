@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine.
-  config.vm.network :forwarded_port, guest: 8000, host: 8000
+  config.vm.network :forwarded_port, guest: 5000, host: 5000
   # Give the vagrant guest an IP accessible only from the host
   config.vm.network :private_network, ip: "192.168.111.223"
 
